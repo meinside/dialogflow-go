@@ -172,8 +172,6 @@ type IntentParameter struct {
 }
 
 type IntentObject struct {
-	ApiResponse
-
 	Name             string           `json:"name"`
 	Auto             bool             `json:"auto"`
 	Contexts         []string         `json:"contexts"`
