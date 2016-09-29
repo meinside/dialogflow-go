@@ -172,6 +172,8 @@ type IntentParameter struct {
 }
 
 type IntentObject struct {
+	ApiResponse // may not present when api call was successful
+
 	Name             string           `json:"name"`
 	Auto             bool             `json:"auto"`
 	Contexts         []string         `json:"contexts"`
@@ -241,13 +243,13 @@ type ContextObject struct {
 }
 
 type ContextResponseCreated struct {
-	ApiResponse
+	ApiResponse // may not present when api call was successful
 
 	Names []string `json:"names"`
 }
 
 type ContextResponseDeleted struct {
-	ApiResponse
+	ApiResponse // may not present when api call was successful
 
 	Deleted []string `json:"deleted"`
 }
