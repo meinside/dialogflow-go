@@ -31,10 +31,10 @@ func (c *Client) Context(sid, contextName string) (result ContextObject, err err
 	return ContextObject{}, err
 }
 
-// Create a context.
-func (c *Client) CreateContext(sid string, context ContextObject) (result ContextResponseCreated, err error) {
+// Create contexts.
+func (c *Client) CreateContexts(sid string, contexts []ContextObject) (result ContextResponseCreated, err error) {
 	var bytes []byte
-	if bytes, err = c.httpPost("contexts", nil, map[string]string{"sessionId": sid}, context); err == nil {
+	if bytes, err = c.httpPost("contexts", nil, map[string]string{"sessionId": sid}, contexts); err == nil {
 		if err = json.Unmarshal(bytes, &result); err == nil {
 			return result, nil
 		}

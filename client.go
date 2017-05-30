@@ -85,7 +85,7 @@ func (c *Client) httpGet(api string, headers, params map[string]string) (result 
 func (c *Client) httpPostPutDelete(method, api string, headers, params map[string]string, object interface{}) (result []byte, err error) {
 	url := apiUrl(api)
 	if c.Verbose {
-		log.Printf("[%s] requesting url: %s, headers: %+v, object: %+v\n", method, url, headers, object)
+		log.Printf("[%s] requesting url: %s, headers: %+v, params: %+v, object: %+v\n", method, url, headers, params, object)
 	}
 
 	var data []byte

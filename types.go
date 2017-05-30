@@ -526,9 +526,9 @@ type CortanaCommand struct {
 //
 // https://docs.api.ai/docs/contexts
 type ContextObject struct {
-	Name       string             `json:"name,omitempty"`
-	Lifespan   int                `json:"lifespan,omitempty"`
-	Parameters []ContextParameter `json:"parameters,omitempty"`
+	Name       string           `json:"name,omitempty"`
+	Lifespan   int              `json:"lifespan,omitempty"`
+	Parameters ContextParameter `json:"parameters,omitempty"` // XXX - document's specification and its sample request is different...
 }
 
 type ContextParameter struct {

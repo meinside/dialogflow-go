@@ -174,15 +174,15 @@ func main() {
 	//
 	////////////////
 	// create a context
-	if response, err := client.CreateContext(sessionId, ai.ContextObject{
-		Name: "test-context",
-		Parameters: []ai.ContextParameter{
-			ai.ContextParameter{
+	if response, err := client.CreateContexts(sessionId, []ai.ContextObject{
+		ai.ContextObject{
+			Name:     "test-context",
+			Lifespan: 3,
+			Parameters: ai.ContextParameter{
 				Name:  "some-name",
 				Value: "some-value",
 			},
 		},
-		Lifespan: 3,
 	}); err == nil {
 		fmt.Printf(">>> created context = %+v\n", response)
 	} else {
