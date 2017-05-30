@@ -178,9 +178,9 @@ func main() {
 		ai.ContextObject{
 			Name:     "test-context",
 			Lifespan: 3,
-			Parameters: ai.ContextParameter{
-				Name:  "some-name",
-				Value: "some-value",
+			Parameters: map[string]interface{}{
+				"name":  "some-name",
+				"value": "some-value",
 			},
 		},
 	}); err == nil {
