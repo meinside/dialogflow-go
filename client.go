@@ -24,7 +24,7 @@ type Client struct {
 	Verbose     bool   `json:"verbose"`
 }
 
-// get a new api client with given access token
+// Get a new api client with given access token.
 func NewClient(accessToken string) *Client {
 	return &Client{
 		AccessToken: accessToken,
@@ -32,17 +32,17 @@ func NewClient(accessToken string) *Client {
 	}
 }
 
-// generate api url
+// Generate api url.
 func apiUrl(api string) string {
 	return fmt.Sprintf("%s/%s?v=%s", BaseUrl, api, Version)
 }
 
-// get http header for authorization
+// Get http header for authorization.
 func (c *Client) authHeader() string {
 	return fmt.Sprintf("Bearer %s", c.AccessToken)
 }
 
-// http get
+// Do http get.
 func (c *Client) httpGet(api string, headers, params map[string]string) (result []byte, err error) {
 	url := apiUrl(api)
 	if c.Verbose {
@@ -81,7 +81,7 @@ func (c *Client) httpGet(api string, headers, params map[string]string) (result 
 	return []byte{}, err
 }
 
-// http post, put, or delete (json)
+// Do http post, put, or delete. (json)
 func (c *Client) httpPostPutDelete(method, api string, headers, params map[string]string, object interface{}) (result []byte, err error) {
 	url := apiUrl(api)
 	if c.Verbose {
@@ -124,66 +124,82 @@ func (c *Client) httpPostPutDelete(method, api string, headers, params map[strin
 	return []byte{}, err
 }
 
-// http post (json)
+// Do http post. (json)
 func (c *Client) httpPost(api string, headers, params map[string]string, object interface{}) (result []byte, err error) {
 	return c.httpPostPutDelete("POST", api, headers, params, object)
 }
 
-// http put (json)
+// Do http put. (json)
 func (c *Client) httpPut(api string, headers map[string]string, object interface{}) (result []byte, err error) {
 	return c.httpPostPutDelete("PUT", api, headers, nil, object)
 }
 
-// http delete
+// Do http delete.
 func (c *Client) httpDelete(api string, headers, params map[string]string, object interface{}) (result []byte, err error) {
 	return c.httpPostPutDelete("DELETE", api, headers, params, object)
 }
 
-// http post (multipart)
-func (c *Client) httpPostMultipart(api string, headers map[string]string, params map[string]interface{}, filepaths map[string]string) (result []byte, err error) {
+// Do http post. (multipart)
+func (c *Client) httpPostMultipart(api string, headers map[string]string, params map[string]interface{}, files map[string]interface{}) (result []byte, err error) {
 	url := apiUrl(api)
 	if c.Verbose {
-		log.Printf("requesting url: %s, headers: %+v, params: %+v, filepaths: %+v\n", url, headers, params, filepaths)
+		log.Printf("requesting url: %s, headers: %+v, params: %+v, files: %+v\n", url, headers, params, files)
 	}
 
 	var buffer bytes.Buffer
 	writer := multipart.NewWriter(&buffer)
 	var fw io.Writer
 
+	var req *http.Request
+
 	// write strings
 	for k, v := range params {
 		if fw, err = writer.CreateFormField(k); err != nil {
-			return []byte{}, err
+			goto OnError
 		}
 		var data []byte
 		if data, err = json.Marshal(v); err != nil {
-			return []byte{}, err
+			goto OnError
 		}
 		if _, err = fw.Write(data); err != nil {
-			return []byte{}, err
+			goto OnError
 		}
 	}
 
 	// write file
-	for k, v := range filepaths {
-		if fw, err = writer.CreateFormFile(k, v); err != nil {
-			return []byte{}, err
-		}
+	for k, v := range files {
+		var file *os.File = nil
 
-		var file *os.File
-		if file, err = os.Open(v); err != nil {
-			return []byte{}, err
+		switch t := v.(type) {
+		case *os.File:
+			file = v.(*os.File)
+			var stat os.FileInfo
+			if stat, err = file.Stat(); err != nil {
+				goto OnError
+			}
+			if fw, err = writer.CreateFormFile(k, stat.Name()); err != nil {
+				goto OnError
+			}
+		case string: // filepath
+			var filename string = v.(string)
+			if fw, err = writer.CreateFormFile(k, filename); err != nil {
+				goto OnError
+			}
+			if file, err = os.Open(filename); err != nil {
+				goto OnError
+			}
+			defer file.Close()
+		default:
+			return []byte{}, fmt.Errorf("type %T not supported", t)
 		}
-		defer file.Close()
 		if _, err = io.Copy(fw, file); err != nil {
-			return []byte{}, err
+			goto OnError
 		}
 	}
 
 	// close writer
 	writer.Close()
 
-	var req *http.Request
 	if req, err = http.NewRequest("POST", url, &buffer); err == nil {
 		req.Header.Set("Authorization", c.authHeader())
 		req.Header.Set("Content-Type", writer.FormDataContentType())
@@ -206,6 +222,8 @@ func (c *Client) httpPostMultipart(api string, headers map[string]string, params
 			}
 		}
 	}
+
+OnError:
 
 	return []byte{}, err
 }

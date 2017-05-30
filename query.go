@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-// query text
+// Query text.
 //
 // https://docs.api.ai/docs/query
 func (c *Client) QueryText(query QueryRequest) (result QueryResponse, err error) {
@@ -18,12 +18,14 @@ func (c *Client) QueryText(query QueryRequest) (result QueryResponse, err error)
 	return QueryResponse{}, err
 }
 
-// query voice in .wav(16000Hz, signed PCM, 16 bit, mono) format
+// Query voice in .wav(16000Hz, signed PCM, 16 bit, mono) format.
+//
+// - file: filepath(string) or opened file (*os.File)
 //
 // NOTE: this api requires paid plan
 //
 // https://docs.api.ai/docs/query
-func (c *Client) QueryVoice(query QueryRequest, filepath string) (result QueryResponse, err error) {
+func (c *Client) QueryVoice(query QueryRequest, file interface{}) (result QueryResponse, err error) {
 	var bytes []byte
 	if bytes, err = c.httpPostMultipart(
 		"query",
@@ -31,8 +33,8 @@ func (c *Client) QueryVoice(query QueryRequest, filepath string) (result QueryRe
 		map[string]interface{}{
 			"request": query,
 		},
-		map[string]string{
-			"voiceData": filepath,
+		map[string]interface{}{
+			"voiceData": file,
 		},
 	); err == nil {
 		if err = json.Unmarshal(bytes, &result); err == nil {

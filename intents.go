@@ -7,8 +7,8 @@ import (
 	"fmt"
 )
 
-// get all intents
-func (c *Client) AllIntents() (result []Entity, err error) {
+// Get all intents.
+func (c *Client) AllIntents() (result []Intent, err error) {
 	var bytes []byte
 	if bytes, err = c.httpGet("intents", nil, nil); err == nil {
 		if err = json.Unmarshal(bytes, &result); err == nil {
@@ -16,10 +16,10 @@ func (c *Client) AllIntents() (result []Entity, err error) {
 		}
 	}
 
-	return []Entity{}, err
+	return []Intent{}, err
 }
 
-// get an intent
+// Get an intent.
 func (c *Client) Intent(iid string) (result IntentObject, err error) {
 	var bytes []byte
 	if bytes, err = c.httpGet(fmt.Sprintf("intents/%s", iid), nil, nil); err == nil {
@@ -31,7 +31,7 @@ func (c *Client) Intent(iid string) (result IntentObject, err error) {
 	return IntentObject{}, err
 }
 
-// create a new intent
+// Create a new intent.
 //
 // (do not fill Id in IntentObject)
 func (c *Client) CreateIntent(intent IntentObject) (result ApiResponse, err error) {
@@ -45,7 +45,7 @@ func (c *Client) CreateIntent(intent IntentObject) (result ApiResponse, err erro
 	return ApiResponse{}, err
 }
 
-// update an intent
+// Update an intent.
 func (c *Client) UpdateIntent(iid string, intent IntentObject) (result ApiResponse, err error) {
 	var bytes []byte
 	if bytes, err = c.httpPut(fmt.Sprintf("intents/%s", iid), nil, intent); err == nil {
@@ -57,7 +57,7 @@ func (c *Client) UpdateIntent(iid string, intent IntentObject) (result ApiRespon
 	return ApiResponse{}, err
 }
 
-// delete an intent
+// Delete an intent.
 func (c *Client) DeleteIntent(iid string) (result ApiResponse, err error) {
 	var bytes []byte
 	if bytes, err = c.httpDelete(fmt.Sprintf("intents/%s", iid), nil, nil, nil); err == nil {

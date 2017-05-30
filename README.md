@@ -19,14 +19,14 @@ import (
 
 func main() {
 	// variables for test
-	token := "000000aaaaaa111111bbbbbbcccccc"	// XXX - your token here
+	token := "000000aaaaaa111111bbbbbbcccccc" // XXX - your token here
 	sessionId := "test_0123456789"
 	newEntityName := "test-new-entity"
 
 	// setup a client
 	client := ai.NewClient(token)
 	//client.Verbose = false
-	client.Verbose = true	// for verbose messages
+	client.Verbose = true // for verbose messages
 
 	/////////////////////////////////////////////
 	// Query
@@ -113,9 +113,6 @@ func main() {
 							Lifespan: 1,
 						},
 					},
-					Speech: []string{
-						"speech 1",
-					},
 				},
 			},
 		}); err == nil {
@@ -150,9 +147,6 @@ func main() {
 								Lifespan: 1,
 							},
 						},
-						Speech: []string{
-							"speech 1",
-						},
 					},
 				},
 			}); err == nil {
@@ -182,8 +176,11 @@ func main() {
 	// create a context
 	if response, err := client.CreateContext(sessionId, ai.ContextObject{
 		Name: "test-context",
-		Parameters: map[string]interface{}{
-			"name": "some-name",
+		Parameters: []ai.ContextParameter{
+			ai.ContextParameter{
+				Name:  "some-name",
+				Value: "some-value",
+			},
 		},
 		Lifespan: 3,
 	}); err == nil {
