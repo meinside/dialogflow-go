@@ -140,6 +140,16 @@ type TextResponseMessageObject struct {
 	Speech []string `json:"speech"`
 }
 
+// helper function for creating a TextResponseMessage
+func TextResponseMessage(platform string, speech []string) Message {
+	msg := map[string]interface{}{
+		"type":     TextResponseMessageObjectType,
+		"platform": platform,
+		"speech":   speech,
+	}
+	return Message(msg)
+}
+
 // https://docs.api.ai/docs/intents#section-card-message-object
 type CardMessageObject struct {
 	MessageObject
@@ -464,19 +474,19 @@ type IntentObject struct {
 	ApiResponse // may not present when api call was successful
 
 	Name                  string           `json:"name"`
-	Auto                  bool             `json:"auto"`
-	Contexts              []string         `json:"contexts"`
-	Templates             []string         `json:"templates"`
-	UserSays              []UserSays       `json:"userSays"`
-	Responses             []IntentResponse `json:"responses"`
-	Priority              int              `json:"priority"`
-	WebhookUsed           bool             `json:"webhookUsed"`
-	WebhookForSlotFilling bool             `json:"webhookForSlotFilling"`
-	FallbackIntent        bool             `json:"fallbackIntent"`
-	CortanaCommand        CortanaCommand   `json:"cortanaCommand"`
+	Auto                  bool             `json:"auto,omitempty"`
+	Contexts              []string         `json:"contexts,omitempty"`
+	Templates             []string         `json:"templates,omitempty"`
+	UserSays              []UserSays       `json:"userSays,omitempty"`
+	Responses             []IntentResponse `json:"responses,omitempty"`
+	Priority              int              `json:"priority,omitempty"`
+	WebhookUsed           bool             `json:"webhookUsed,omitempty"`
+	WebhookForSlotFilling bool             `json:"webhookForSlotFilling,omitempty"`
+	FallbackIntent        bool             `json:"fallbackIntent,omitempty"`
+	CortanaCommand        CortanaCommand   `json:"cortanaCommand,omitempty"`
 	Events                []struct {
 		Name string `json:"name"`
-	} `json:"events"`
+	} `json:"events,omitempty"`
 }
 
 type UserSays struct {
