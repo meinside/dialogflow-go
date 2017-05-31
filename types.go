@@ -488,9 +488,9 @@ type UserSays struct {
 
 type UserSaysData struct {
 	Text        string `json:"text"`
-	Meta        string `json:"meta"`
-	Alias       string `json:"alias"`
-	UserDefined bool   `json:"userDefined"`
+	Meta        string `json:"meta,omitempty"`
+	Alias       string `json:"alias,omitempty"`
+	UserDefined bool   `json:"userDefined,omitempty"`
 }
 
 type IntentResponse struct {
