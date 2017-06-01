@@ -120,7 +120,7 @@ const (
 
 type MessageObject struct {
 	Type     MessageType `json:"type"`
-	Platform string      `json:"platform"`
+	Platform string      `json:"platform,omitempty"`
 }
 
 type Message map[string]interface{}
@@ -143,10 +143,13 @@ type TextResponseMessageObject struct {
 // helper function for creating a TextResponseMessage
 func TextResponseMessage(platform string, speech []string) Message {
 	msg := map[string]interface{}{
-		"type":     TextResponseMessageObjectType,
-		"platform": platform,
-		"speech":   speech,
+		"type":   TextResponseMessageObjectType,
+		"speech": speech,
 	}
+	if len(platform) > 0 {
+		msg["platform"] = platform
+	}
+
 	return Message(msg)
 }
 
@@ -504,7 +507,7 @@ type UserSaysData struct {
 }
 
 type IntentResponse struct {
-	Action                   string                    `json:"action"`
+	Action                   string                    `json:"action,omitempty"`
 	ResetContexts            bool                      `json:"resetContexts"`
 	AffectedContexts         []IntentAffectedContext   `json:"affectedContexts"`
 	Parameters               []IntentResponseParameter `json:"parameters"`
