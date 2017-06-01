@@ -508,11 +508,11 @@ type UserSaysData struct {
 
 type IntentResponse struct {
 	Action                   string                    `json:"action,omitempty"`
-	ResetContexts            bool                      `json:"resetContexts"`
-	AffectedContexts         []IntentAffectedContext   `json:"affectedContexts"`
-	Parameters               []IntentResponseParameter `json:"parameters"`
-	Messages                 []Message                 `json:"messages"`
-	DefaultResponsePlatforms []string                  `json:"defaultResponsePlatforms"`
+	ResetContexts            bool                      `json:"resetContexts,omitempty"`
+	AffectedContexts         []IntentAffectedContext   `json:"affectedContexts,omitempty"`
+	Parameters               []IntentResponseParameter `json:"parameters,omitempty"`
+	Messages                 []Message                 `json:"messages,omitempty"`
+	DefaultResponsePlatforms []string                  `json:"defaultResponsePlatforms,omitempty"`
 }
 
 type IntentAffectedContext struct {
@@ -525,8 +525,8 @@ type IntentResponseParameter struct {
 	Value        string   `json:"value"`
 	DefaultValue string   `json:"defaultValue"`
 	Required     bool     `json:"required"`
-	DataType     string   `json:"dataType"`
-	Prompts      []string `json:"prompts"`
+	DataType     string   `json:"dataType,omitempty"`
+	Prompts      []string `json:"prompts,omitempty"`
 	IsList       bool     `json:"isList"`
 }
 
