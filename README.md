@@ -1,9 +1,13 @@
-# Simple Go library for api.ai
+# Simple Go library for Dialogflow
+
+This repository is a rework of [api.ai-go](https://github.com/meinside/api.ai-go), due to the [change of service name from API.AI to Dialogflow](https://blog.dialogflow.com/post/apiai-new-name-dialogflow-new-features/).
+
+Dialogflow's API reference is [here](https://dialogflow.com/docs/reference/agent/).
 
 ## Install
 
 ```
-$ go get -u github.com/meinside/api.ai-go
+$ go get -u github.com/meinside/dialogflow-go
 ```
 
 ## Usage / Example
@@ -14,7 +18,7 @@ package main
 import (
 	"fmt"
 
-	ai "github.com/meinside/api.ai-go"
+	df "github.com/meinside/dialogflow-go"
 )
 
 func main() {
@@ -24,7 +28,7 @@ func main() {
 	newEntityName := "test-new-entity"
 
 	// setup a client
-	client := ai.NewClient(token)
+	client := df.NewClient(token)
 	//client.Verbose = false
 	client.Verbose = true // for verbose messages
 
@@ -33,10 +37,10 @@ func main() {
 	//
 	////////////////
 	// query text
-	if response, err := client.QueryText(ai.QueryRequest{
+	if response, err := client.QueryText(df.QueryRequest{
 		Query:     []string{"May I test?"},
 		SessionId: sessionId,
-		Language:  ai.English,
+		Language:  df.English,
 	}); err == nil {
 		fmt.Printf(">>> response = %+v\n", response)
 	} else {
@@ -48,10 +52,10 @@ func main() {
 	//
 	////////////////
 	// create entity
-	if response, err := client.CreateEntity(ai.EntityObject{
+	if response, err := client.CreateEntity(df.EntityObject{
 		Name: newEntityName,
-		Entries: []ai.EntityEntryObject{
-			ai.EntityEntryObject{
+		Entries: []df.EntityEntryObject{
+			df.EntityEntryObject{
 				Value: "Roadhog",
 				Synonyms: []string{
 					"Roadhog",
@@ -86,7 +90,7 @@ func main() {
 
 		////////////////
 		// create an intent
-		if response, err := client.CreateIntent(ai.IntentObject{
+		if response, err := client.CreateIntent(df.IntentObject{
 			Name:     "test-intent",
 			Auto:     true,
 			Contexts: []string{},
@@ -94,21 +98,21 @@ func main() {
 				"test 1",
 				"test 2",
 			},
-			UserSays: []ai.UserSays{
-				ai.UserSays{
-					Data: []ai.UserSaysData{
-						ai.UserSaysData{
+			UserSays: []df.UserSays{
+				df.UserSays{
+					Data: []df.UserSaysData{
+						df.UserSaysData{
 							Text: "test says 1",
 						},
 					},
 				},
 			},
-			Responses: []ai.IntentResponse{
-				ai.IntentResponse{
+			Responses: []df.IntentResponse{
+				df.IntentResponse{
 					Action:        "test-action1",
 					ResetContexts: false,
-					AffectedContexts: []ai.IntentAffectedContext{
-						ai.IntentAffectedContext{
+					AffectedContexts: []df.IntentAffectedContext{
+						df.IntentAffectedContext{
 							Name:     "test1",
 							Lifespan: 1,
 						},
@@ -120,7 +124,7 @@ func main() {
 
 			////////////////
 			// update an intent
-			if response, err := client.UpdateIntent(response.Id, ai.IntentObject{
+			if response, err := client.UpdateIntent(response.Id, df.IntentObject{
 				Name:     "test-intent-updated",
 				Auto:     true,
 				Contexts: []string{},
@@ -128,21 +132,21 @@ func main() {
 					"test 1",
 					"test 2",
 				},
-				UserSays: []ai.UserSays{
-					ai.UserSays{
-						Data: []ai.UserSaysData{
-							ai.UserSaysData{
+				UserSays: []df.UserSays{
+					df.UserSays{
+						Data: []df.UserSaysData{
+							df.UserSaysData{
 								Text: "test says 1",
 							},
 						},
 					},
 				},
-				Responses: []ai.IntentResponse{
-					ai.IntentResponse{
+				Responses: []df.IntentResponse{
+					df.IntentResponse{
 						Action:        "test-action1",
 						ResetContexts: false,
-						AffectedContexts: []ai.IntentAffectedContext{
-							ai.IntentAffectedContext{
+						AffectedContexts: []df.IntentAffectedContext{
+							df.IntentAffectedContext{
 								Name:     "test1",
 								Lifespan: 1,
 							},
@@ -174,8 +178,8 @@ func main() {
 	//
 	////////////////
 	// create a context
-	if response, err := client.CreateContexts(sessionId, []ai.ContextObject{
-		ai.ContextObject{
+	if response, err := client.CreateContexts(sessionId, []df.ContextObject{
+		df.ContextObject{
 			Name:     "test-context",
 			Lifespan: 3,
 			Parameters: map[string]interface{}{
@@ -214,6 +218,10 @@ func main() {
 	}
 }
 ```
+
+## Todos
+
+- [ ] Add tests
 
 ## License
 

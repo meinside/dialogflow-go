@@ -1,4 +1,4 @@
-package apiai
+package dialogflow
 
 import (
 	"bytes"
@@ -14,9 +14,11 @@ import (
 )
 
 const (
-	Version = "20150910" // https://docs.api.ai/docs/versioning
+	// https://dialogflow.com/docs/reference/agent/#protocol_version
+	Version = "20150910"
 
-	BaseUrl = "https://api.api.ai/v1"
+	// https://dialogflow.com/docs/reference/agent/#base_url
+	BaseUrl = "https://api.dialogflow.com/v1"
 )
 
 type Client struct {

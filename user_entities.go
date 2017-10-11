@@ -1,6 +1,6 @@
-package apiai
+package dialogflow
 
-// https://docs.api.ai/docs/userentities
+// https://dialogflow.com/docs/reference/agent/userentities
 
 import (
 	"encoding/json"

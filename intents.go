@@ -1,6 +1,6 @@
-package apiai
+package dialogflow
 
-// https://docs.api.ai/docs/intents
+// https://dialogflow.com/docs/reference/agent/intents
 
 import (
 	"encoding/json"

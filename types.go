@@ -1,6 +1,6 @@
-package apiai
+package dialogflow
 
-// https://docs.api.ai/docs/languages
+// https://dialogflow.com/docs/reference/language
 type LanguageTag string
 
 const (
@@ -10,7 +10,13 @@ const (
 	ChineseTraditional  LanguageTag = "zh-TW"
 	Dutch               LanguageTag = "nl"
 	English             LanguageTag = "en"
+	EnglishAustralian   LanguageTag = "en-AU"
+	EnglishCanadian     LanguageTag = "en-CA"
+	EnglishUK           LanguageTag = "en-GB"
+	EnglishUS           LanguageTag = "en-US"
 	French              LanguageTag = "fr"
+	FrenchCanadian      LanguageTag = "fr-CA"
+	FrenchFrench        LanguageTag = "fr-FR"
 	German              LanguageTag = "de"
 	Italian             LanguageTag = "it"
 	Japanese            LanguageTag = "ja"
@@ -21,7 +27,7 @@ const (
 	Ukrainian           LanguageTag = "uk"
 )
 
-// https://docs.api.ai/docs/status-and-error-codes
+// https://dialogflow.com/docs/reference/agent/#status_and_error_codes
 type ErrorType string
 
 const (
@@ -37,7 +43,7 @@ const (
 	TooManyRequests ErrorType = "too_many_requests"
 )
 
-// https://docs.api.ai/docs/status-object
+// https://dialogflow.com/docs/reference/agent/#status_object
 type StatusObject struct {
 	Code         int       `json:"code"`
 	ErrorType    ErrorType `json:"errorType"`
@@ -52,7 +58,7 @@ type ApiResponse struct {
 
 ///////////////////////////////
 //
-// https://docs.api.ai/docs/query
+// https://dialogflow.com/docs/reference/agent/query#query_parameters_and_json_fields
 type QueryRequest struct {
 	Query         []string        `json:"query,omitempty"`
 	SessionId     string          `json:"sessionId"`
@@ -97,7 +103,7 @@ type QueryResponse struct {
 		Contexts         []ContextObject        `json:"contexts"`
 		Fulfillment      struct {
 			Speech   string    `json:"speech"`
-			Messages []Message `json:"messages"` // https://docs.api.ai/docs/query#section-message-objects
+			Messages []Message `json:"messages"` // https://dialogflow.com/docs/reference/agent/query#message_objects
 		} `json:"fulfillment"`
 		Score    float32  `json:"score"`
 		Metadata Metadata `json:"metadata"`
@@ -106,7 +112,7 @@ type QueryResponse struct {
 	SessionId string       `json:"sessionId"`
 }
 
-// https://docs.api.ai/docs/query#section-message-objects
+// https://dialogflow.com/docs/reference/agent/query#message_objects
 type MessageType int
 
 const (
@@ -134,7 +140,6 @@ func (f Message) Type() MessageType {
 	return NoSuchObjectType
 }
 
-// https://docs.api.ai/docs/intents#section-text-response-message-object
 type TextResponseMessageObject struct {
 	MessageObject
 	Speech []string `json:"speech"`
@@ -153,7 +158,6 @@ func TextResponseMessage(platform string, speech []string) Message {
 	return Message(msg)
 }
 
-// https://docs.api.ai/docs/intents#section-card-message-object
 type CardMessageObject struct {
 	MessageObject
 	Title    string              `json:"title"`
@@ -166,26 +170,22 @@ type CardMessageButton struct {
 	Postback string `json:"postback"`
 }
 
-// https://docs.api.ai/docs/intents#section-quick-replies-message-object
 type QuickRepliesMessageObject struct {
 	MessageObject
 	Title   string   `json:"title"`
 	Replies []string `json:"replies"`
 }
 
-// https://docs.api.ai/docs/intents#section-image-message-object
 type ImageMessageObject struct {
 	MessageObject
 	ImageUrl string `json:"imageUrl"`
 }
 
-// https://docs.api.ai/docs/intents#section-custom-payload-message-object
 type CustomPayloadMessageObject struct {
 	MessageObject
 	Payload interface{} `json:"payload"`
 }
 
-// https://docs.api.ai/docs/intents#section-text-response-message-object
 func (f Message) ToTextResponseMessage() TextResponseMessageObject {
 	m := map[string]interface{}(f)
 
@@ -223,7 +223,6 @@ func (f Message) ToTextResponseMessage() TextResponseMessageObject {
 	}
 }
 
-// https://docs.api.ai/docs/intents#section-card-message-object
 func (f Message) ToCardMessage() CardMessageObject {
 	m := map[string]interface{}(f)
 
@@ -288,7 +287,6 @@ func (f Message) ToCardMessage() CardMessageObject {
 	}
 }
 
-// https://docs.api.ai/docs/intents#section-quick-replies-message-object
 func (f Message) ToQuickRepliesMessage() QuickRepliesMessageObject {
 	m := map[string]interface{}(f)
 
@@ -334,7 +332,6 @@ func (f Message) ToQuickRepliesMessage() QuickRepliesMessageObject {
 	}
 }
 
-// https://docs.api.ai/docs/intents#section-image-message-object
 func (f Message) ToImageMessage() ImageMessageObject {
 	m := map[string]interface{}(f)
 
@@ -370,7 +367,6 @@ func (f Message) ToImageMessage() ImageMessageObject {
 	}
 }
 
-// https://docs.api.ai/docs/intents#section-custom-payload-message-object
 func (f Message) ToCustomPayloadMessage() CustomPayloadMessageObject {
 	m := map[string]interface{}(f)
 
@@ -413,7 +409,7 @@ type Metadata struct {
 
 ///////////////////////////////
 //
-// https://docs.api.ai/docs/entities
+// https://dialogflow.com/docs/reference/agent/entities#entity_object
 type EntityObject struct {
 	ApiResponse
 
@@ -430,7 +426,7 @@ type EntityEntryObject struct {
 
 ///////////////////////////////
 //
-// https://docs.api.ai/docs/userentities
+// https://dialogflow.com/docs/reference/agent/userentities#user_entity_object
 type UserEntityObject struct {
 	ApiResponse
 
@@ -447,7 +443,7 @@ type NewUserEntitiesObject struct {
 
 ///////////////////////////////
 //
-// https://docs.api.ai/docs/intents
+// https://dialogflow.com/docs/reference/agent/intents#intent_object
 type Intent struct {
 	Id             string            `json:"id"`
 	Name           string            `json:"name"`
@@ -537,7 +533,7 @@ type CortanaCommand struct {
 
 ///////////////////////////////
 //
-// https://docs.api.ai/docs/contexts
+// https://dialogflow.com/docs/reference/agent/contexts#context_object
 type ContextObject struct {
 	Name       string                 `json:"name,omitempty"`
 	Lifespan   int                    `json:"lifespan,omitempty"`

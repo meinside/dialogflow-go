@@ -1,12 +1,12 @@
-package apiai
+package dialogflow
+
+// https://dialogflow.com/docs/reference/agent/query
 
 import (
 	"encoding/json"
 )
 
 // Query text.
-//
-// https://docs.api.ai/docs/query
 func (c *Client) QueryText(query QueryRequest) (result QueryResponse, err error) {
 	var bytes []byte
 	if bytes, err = c.httpPost("query", nil, nil, query); err == nil {
@@ -18,13 +18,12 @@ func (c *Client) QueryText(query QueryRequest) (result QueryResponse, err error)
 	return QueryResponse{}, err
 }
 
+/*
 // Query voice in .wav(16000Hz, signed PCM, 16 bit, mono) format.
 //
 // - file: filepath(string) or opened file (*os.File)
 //
 // NOTE: this api requires paid plan
-//
-// https://docs.api.ai/docs/query
 func (c *Client) QueryVoice(query QueryRequest, file interface{}) (result QueryResponse, err error) {
 	var bytes []byte
 	if bytes, err = c.httpPostMultipart(
@@ -44,3 +43,4 @@ func (c *Client) QueryVoice(query QueryRequest, file interface{}) (result QueryR
 
 	return QueryResponse{}, err
 }
+*/
